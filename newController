@@ -1,0 +1,84 @@
+package com.qm.ControllerImpl;
+
+import java.util.List;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+import com.qm.Controller.ProjectInterface;
+import com.qm.Populator.ProjectPopulator;
+import com.qm.Repository.impl.ProjectDaoImpl;
+import com.qm.ServiceImpl.ProjectServiceImpl;
+import com.qm.dto.ProjectDto;
+import com.qm.model.ProjectModel;
+
+
+@RestController
+@Path("/project")
+public class ProjectController implements ProjectInterface
+{
+
+	@Autowired 
+	ProjectServiceImpl projectService;
+	
+	@Autowired
+	ProjectDaoImpl projectDao;
+	
+	@Autowired
+	ProjectPopulator projectPopulator;
+	
+	@GET
+	@Path("/getprojects")
+	//@RequestMapping(value = "/getprojects", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE)
+	@Override
+	public ProjectDto getProject(int projectId) {
+		System.out.println("Inside Controller");
+		ProjectDto projectDto = projectService.getProject(1);
+		return projectDto;	
+	}	
+	
+	@GET
+	@Path("/user")
+	@Produces(MediaType.APPLICATION_XML_VALUE)
+	//@RequestMapping(value = "/user", method = RequestMethod.GET)
+	@Override
+	public ResponseEntity<List<ProjectModel>> getAllProjects() {
+		System.out.println("inside get all projects");
+		 List<ProjectModel> users = projectService.getAllProjects();
+	        if(users.isEmpty()){
+	            return new ResponseEntity<List<ProjectModel>>(HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
+	        }
+	        return new ResponseEntity<List<ProjectModel>>(users, HttpStatus.OK);
+		
+		
+	}
+
+	@Override
+	public void deleteProject(ProjectModel project) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateProject(ProjectModel project) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addProjects(ProjectDto project) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+}
