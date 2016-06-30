@@ -1,0 +1,173 @@
+-- MySQL Administrator dump 1.4
+--
+-- ------------------------------------------------------
+-- Server version	5.5.21
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+
+--
+-- Create schema qmdb
+--
+
+CREATE DATABASE IF NOT EXISTS qmdb;
+USE qmdb;
+
+--
+-- Definition of table `project`
+--
+
+DROP TABLE IF EXISTS `project`;
+CREATE TABLE `project` (
+  `ProjectId` int(11) NOT NULL,
+  `projectname` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ProjectId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `project`
+--
+
+/*!40000 ALTER TABLE `project` DISABLE KEYS */;
+INSERT INTO `project` (`ProjectId`,`projectname`,`description`) VALUES 
+ (1,'TravelClick','Testing Project'),
+ (2,'Digital River','Testing Project');
+/*!40000 ALTER TABLE `project` ENABLE KEYS */;
+
+
+--
+-- Definition of table `testcase`
+--
+
+DROP TABLE IF EXISTS `testcase`;
+CREATE TABLE `testcase` (
+  `TestCaseId` int(11) NOT NULL,
+  `CaseTitle` varchar(255) NOT NULL,
+  `Description` varchar(255) DEFAULT NULL,
+  `Datasetexpected` varchar(255) DEFAULT NULL,
+  `TestPlanId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`TestCaseId`),
+  KEY `TestPlanId` (`TestPlanId`),
+  CONSTRAINT `testcase_ibfk_1` FOREIGN KEY (`TestPlanId`) REFERENCES `testplan` (`TestPlanId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `testcase`
+--
+
+/*!40000 ALTER TABLE `testcase` DISABLE KEYS */;
+/*!40000 ALTER TABLE `testcase` ENABLE KEYS */;
+
+
+--
+-- Definition of table `testexecution`
+--
+
+DROP TABLE IF EXISTS `testexecution`;
+CREATE TABLE `testexecution` (
+  `TestExecutionId` int(11) NOT NULL,
+  `RunsON` varchar(255) DEFAULT NULL,
+  `Result` varchar(255) DEFAULT NULL,
+  `Status` varchar(255) DEFAULT NULL,
+  `TestCaseId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`TestExecutionId`),
+  KEY `TestCaseId` (`TestCaseId`),
+  CONSTRAINT `testexecution_ibfk_1` FOREIGN KEY (`TestCaseId`) REFERENCES `testcase` (`TestCaseId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `testexecution`
+--
+
+/*!40000 ALTER TABLE `testexecution` DISABLE KEYS */;
+/*!40000 ALTER TABLE `testexecution` ENABLE KEYS */;
+
+
+--
+-- Definition of table `testplan`
+--
+
+DROP TABLE IF EXISTS `testplan`;
+CREATE TABLE `testplan` (
+  `TestPlanId` int(11) NOT NULL AUTO_INCREMENT,
+  `PlanTitle` varchar(255) NOT NULL,
+  `Description` varchar(255) DEFAULT NULL,
+  `ProjectId` int(11) NOT NULL,
+  `Status` varchar(255) DEFAULT 'Created',
+  `Type` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`TestPlanId`),
+  KEY `ProjectId` (`ProjectId`),
+  CONSTRAINT `testplan_ibfk_1` FOREIGN KEY (`ProjectId`) REFERENCES `project` (`ProjectId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `testplan`
+--
+
+/*!40000 ALTER TABLE `testplan` DISABLE KEYS */;
+/*!40000 ALTER TABLE `testplan` ENABLE KEYS */;
+
+
+--
+-- Definition of table `testscript`
+--
+
+DROP TABLE IF EXISTS `testscript`;
+CREATE TABLE `testscript` (
+  `TestScriptId` int(11) NOT NULL,
+  `ScriptTitle` varchar(255) DEFAULT NULL,
+  `Description` varchar(255) DEFAULT NULL,
+  `ExecutionInstruction` varchar(255) DEFAULT NULL,
+  `Dataset` varchar(255) DEFAULT NULL,
+  `TestCaseId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`TestScriptId`),
+  KEY `TestCaseId` (`TestCaseId`),
+  CONSTRAINT `testscript_ibfk_1` FOREIGN KEY (`TestCaseId`) REFERENCES `testcase` (`TestCaseId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `testscript`
+--
+
+/*!40000 ALTER TABLE `testscript` DISABLE KEYS */;
+/*!40000 ALTER TABLE `testscript` ENABLE KEYS */;
+
+
+--
+-- Definition of table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `user`
+--
+
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+
+
+
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
